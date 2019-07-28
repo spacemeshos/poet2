@@ -41,7 +41,8 @@ Prover and verifiers agree on an initial constants w=256 and H = sha256()
 6. Prover sends the proof `p1(x,n')` to the verifier
 7. Verifier verifies the proof p1 by executing `Verify(x,n')` and aborts the protocol if verification fails
 
-## Implementation requirements
+## Implementation Bonus Points
+- Optimize proof size by only including a leaf value once in a proof.
 - Don't use more than O(n) memory in Prove(n)
 
 ### Theoretical background and context
