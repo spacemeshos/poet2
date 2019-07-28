@@ -1,14 +1,15 @@
 # POET2 - Incremental proofs of elapsed time MVP
 
 ## Overview
-This repository provides the specs for an MVP implementing the main construction defined in section 4 of this paper [Incremental proofs sequential work](https://eprint.iacr.org/2019/650]). For brevity, we call this construction `POET2` and refer to this paper in this readme as `POET2 paper`.
+This repository provides the specs for an MVP implementing the main single-threaded construction defined in section 4 of this paper [Incremental proofs sequential work](https://eprint.iacr.org/2019/650]). For brevity, we call this construction `POET2` and refer to this paper in this readme as `POET2 paper`.
 POET2 is based on the basic construction defined in the paper [simple proofs of sequential work](https://eprint.iacr.org/2018/183). We refer to it in this doc as the `POET PAPER`.
 Please read both papers first to get familiar with the protocol. As a reference, please also see this [reference go implementation](https://github.com/spacemeshos/poet) of a non-incremental POET construction.
 
 
 ## Constants
-- w:int. A statistical security parameter. Shared between prover and verifiers. For the MVP we set it to 256
+- w:int. A statistical security parameter. Shared between prover and verifiers. For the MVP we set it to 256. Note that this is denoted as λ in the POET2 paper.
 - H - A cryptographic hash function. For the MVP, we set it to sha256
+- t: a statistical security param set to 150
 
 The constants are fixed and shared between the Prover and the Verifier. Values shown here are just an example and may be set differently for different POET server instances.
 
@@ -31,22 +32,25 @@ todo: define the proofs here from the paper
 ## MVP main use case
 The following steps describe basic incremental POET2 protocol execution between a prover and a verifier as defined in section 4 of the POET2 paper. The happy path for the use case is for the verifier to complete the protocol. e.g. not abort it in any step. The MVP should implement this use case.
 
-Prover and verifiers agree on an initial constants w=256 and H = sha256()
+Prover and verifiers agree on an initial constants w=256, t= 150, and H = sha256()
 
 1. Verifier generates a random commitment x (w bits long) and sends it to the prover
-2. Prover computes proof `p(x,n)` by executing `Prove(x,n)`
+2. Prover computes proof `p(x, n)` by executing `Prove(x, n)`
 3. Prover sends `p(x,n)` to the Verifier
-4. Prover increments the proof by executing `Inc(p, n')` where `n' = n + 1` to generate `p1(x,n')`
-5. Verified verifies the `p(x,n)` by executing `Verify(x,n)` and aborts if verification fails
-6. Prover sends the proof `p1(x,n')` to the verifier
-7. Verifier verifies the proof p1 by executing `Verify(x,n')` and aborts the protocol if verification fails
+4. Prover increments the proof by executing `Inc(x, p, n, n')` where `n' = n + 1` to generate `p1(x,n')`
+5. Verifier verifies the `p(x,n)` by executing `Verify(x, n)` and aborts if verification fails
+6. Prover sends the proof `p1(x, n')` to the verifier
+7. Verifier verifies the proof p1 by executing `Verify(x, n')` and aborts the protocol if verification fails
 
 ## MVP Submission Guidelines
-- Write a test of the main use case running with n = 24 and n' = 25 and verify that your test passes.
+- Implement a prover and verifier where the prover implements Prove(x, n), Inc(x,p,n,n') and the verifier implements Verify(x,n).
+- Implement a simple API between the prover and verifier to execute the main uses case between them
+- Write a test of the main use case running with n = 24 and n' = 25 and verify that your test passes
 
-## Implementation Bonus Points
-- Optimize proof size by only including a leaf value once in a proof.
-- Don't use more than O(n) memory in Prove(n)
+## Implementation Tips for Bonus Points
+- Optimize proof size by only including a leaf value once in a proof
+- Don't use more than w(n+1) bits of memory in Prove(n)
+- Implement the most efficient verifier in terms of computation complexity. See section 4.3 of the POET2 paper
 
 ### Theoretical background and context
 - [1] https://eprint.iacr.org/2019/650.pdf
