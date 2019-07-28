@@ -31,14 +31,18 @@ todo: define the proofs here from the paper
 ## MVP main use case
 The following steps describe basic incremental POET2 protocol execution between a prover and a verifier as defined in section 4 of the POET2 paper. The happy path for the use case is for the verifier to complete the protocol. e.g. not abort it in any step. The MVP should implement this use case.
 
-1. Prover and verifiers agree on an initial constants n, H, and  w
-2. Verifier generates a random commitment x (w bits long) and sends it to the prover
-3. Prover computes proof `p(x,n)` by executing `Prove(x,n)`
-4. Prover sends `p(x,n)` to the Verifier
-5. Prover increments the proof by executing `Inc(p, n')` where `n' = n + 1` to generate `p1(x,n')`
-6. Verified verifies the `p(x,n)` by executing `Verify(x,n)` and aborts if verification fails
-7. Prover sends the proof `p1(x,n')` to the verifier
-8. Verifier verifies the proof p1 by executing `Verify(x,n')` and aborts the protocol if verification fails
+Prover and verifiers agree on an initial constants w=256 and H = sha256()
+
+1. Verifier generates a random commitment x (w bits long) and sends it to the prover
+2. Prover computes proof `p(x,n)` by executing `Prove(x,n)`
+3. Prover sends `p(x,n)` to the Verifier
+4. Prover increments the proof by executing `Inc(p, n')` where `n' = n + 1` to generate `p1(x,n')`
+5. Verified verifies the `p(x,n)` by executing `Verify(x,n)` and aborts if verification fails
+6. Prover sends the proof `p1(x,n')` to the verifier
+7. Verifier verifies the proof p1 by executing `Verify(x,n')` and aborts the protocol if verification fails
+
+## Implementation requirements
+- Don't use more than O(n) memory in Prove(n)
 
 ### Theoretical background and context
 - [1] https://eprint.iacr.org/2019/650.pdf
@@ -48,16 +52,15 @@ The following steps describe basic incremental POET2 protocol execution between 
 - [5] https://pdfs.semanticscholar.org/b904/6d002da153a6fe9b06d469da4efffdfcb9c6.pdf
 
 ### Related work
-- [5] https://github.com/spcemeshos/poet
-- [6] https://github.com/avive/slow-time-functions
+- [6] https://github.com/spcemeshos/poet
+- [7] https://github.com/avive/slow-time-functions
 
-### Implementation Guidelines
+### Implementation Tips
 
 ### DAG(n)
 - We start with B(n) - `the complete binary tree of depth n` where all edges go from leaves up the tree to the root. B(n) has 2^n leaves and 2^n -1 internal nodes. We add edges to the n leaves in the following way:
 - For each leaf i of the 2^n leaves, we add an edge to the leaf from all the direct siblings of the nodes on the path from the leaf to the root node
 - In other words, for every leaf u, we add an edge to u from node v_{b-1}, iff v_{b} is an ancestor of u and nodes v_{b-1}, v_{b} are direct siblings
-
 - Each node in the DAG is identified by a binary string in the form `0`, `01`, `0010` based on its location in Bn. This is the node id
 - The root node at height 0 is identified by the empty string ""
 - The nodes at height 1 (l0 and l1) are labeled `0` and `1`. The nodes at height 2 are labeled `00`, `01`, `10` and `11`, etc... So for each height h, node's id is an h bits binary number that uniquely defines the location of the node in the DAG
@@ -85,9 +88,7 @@ Recursive computation of the labels of DAG(n):
 - When a label value is computed by the algorithm, store it in persistent storage
 - Note that this works because only l0 is needed for computing labels in the tree rooted in l1. All of the additional edges to nodes in the tree rooted at l1 start at l0.
 
-### Data Types
-
-#### Proof (See section 5.2)
+### Proof data (See section 5.2 of POET paper)
 A proof includes the following data:
 1. φ - the label of the root node.
 2. For each identifier i in a challenge (0 <= i < t), an ordered list of labels which includes:
