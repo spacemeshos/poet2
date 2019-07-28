@@ -34,14 +34,14 @@ Prover and verifiers agree on an initial constants w=256, t= 32, and H = sha256(
 
 1. Verifier generates a random commitment x (w bits long) and sends it to the prover
 2. Prover computes proof `p(x, n)` by executing `Prove(x, n)`
-3. Prover sends `p(x,n)` to the Verifier
-4. Prover increments the proof by executing `Inc(x, p, n, n')` where `n' = n + 1` to generate `p1(x,n')`
-5. Verifier verifies the `p(x,n)` by executing `Verify(x, n)` and aborts if verification fails
+3. Prover sends `p(x, n)` to the Verifier
+4. Prover increments the proof by executing `Inc(x, p, n, n')` where `n' = n + 1` to generate `p1(x, n')`
+5. Verifier verifies the `p(x, n)` by executing `Verify(x, n)` and aborts if verification fails
 6. Prover sends the proof `p1(x, n')` to the verifier
 7. Verifier verifies the proof p1 by executing `Verify(x, n')` and aborts the protocol if verification fails
 
 ## MVP Submission Guidelines
-- Implement a prover and verifier where the prover implements Prove(x, n), Inc(x,p,n,n') and the verifier implements Verify(x,n).
+- Implement a prover and verifier where the prover implements Prove(x, n), Inc(x, p, n, n') and the verifier implements Verify(x, n).
 - Use the DAG construction and the schemes described in section 4 of the POET2 paper (Main Construction)
 - Implement a simple API between the prover and verifier to execute the main uses case between them
 - Write a test of the main use case running with n = 24 and n' = 25 and verify that your test passes
