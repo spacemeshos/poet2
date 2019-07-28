@@ -1,8 +1,8 @@
 # POET2 - Incremental proofs of elapsed time MVP
 
 ## Overview
-This repository provides the specs for an MVP implementing the main construction defined in section 4 of this paper [Incremental proofs sequential work](https://eprint.iacr.org/2019/650]). For brevity, we call this construction POET2 and refer to this paper in this readme as `POET2 paper`.
-POET2 is based on the basic construction defined in the paper [simple proofs of sequential work](https://eprint.iacr.org/2018/183). We refer to it in this doc as the 'POET PAPER'.
+This repository provides the specs for an MVP implementing the main construction defined in section 4 of this paper [Incremental proofs sequential work](https://eprint.iacr.org/2019/650]). For brevity, we call this construction `POET2` and refer to this paper in this readme as `POET2 paper`.
+POET2 is based on the basic construction defined in the paper [simple proofs of sequential work](https://eprint.iacr.org/2018/183). We refer to it in this doc as the `POET PAPER`.
 Please read both papers first to get familiar with the protocol. As a reference, please also see this [reference go implementation](https://github.com/spacemeshos/poet) of a non-incremental POET construction.
 
 
@@ -29,7 +29,7 @@ The following entities execute POET2 by sending messages between them:
 todo: define the proofs here from the paper
 
 ## MVP main use case
-The following steps describe basic incremental POET2 protocol execution between a prover and a verifier as defined in section 4 of the POET2 paper. The happy path for the use case is for the verifier to complete the protocol. e.g. not abort it in any step.
+The following steps describe basic incremental POET2 protocol execution between a prover and a verifier as defined in section 4 of the POET2 paper. The happy path for the use case is for the verifier to complete the protocol. e.g. not abort it in any step. The MVP should implement this use case.
 
 1. Prover and verifiers agree on an initial constants n, H, and  w
 2. Verifier generates a random commitment x (w bits long) and sends it to the prover
@@ -53,10 +53,10 @@ The following steps describe basic incremental POET2 protocol execution between 
 
 ### Implementation Guidelines
 
-##### DAG Definition
+### DAG(n)
 - We start with B(n) - `the complete binary tree of depth n` where all edges go from leaves up the tree to the root. B(n) has 2^n leaves and 2^n -1 internal nodes. We add edges to the n leaves in the following way:
-    - For each leaf i of the 2^n leaves, we add an edge to the leaf from all the direct siblings of the nodes on the path from the leaf to the root node
-    - In other words, for every leaf u, we add an edge to u from node v_{b-1}, iff v_{b} is an ancestor of u and nodes v_{b-1}, v_{b} are direct siblings
+- For each leaf i of the 2^n leaves, we add an edge to the leaf from all the direct siblings of the nodes on the path from the leaf to the root node
+- In other words, for every leaf u, we add an edge to u from node v_{b-1}, iff v_{b} is an ancestor of u and nodes v_{b-1}, v_{b} are direct siblings
 
 - Each node in the DAG is identified by a binary string in the form `0`, `01`, `0010` based on its location in Bn. This is the node id
 - The root node at height 0 is identified by the empty string ""
@@ -70,7 +70,7 @@ li = Hx(i,lp1,...,lpd)` where `(p1,...,pd) = parents(i)
 
 For example, the root node's label is `lε = Hx(bytes(""), l0, l1)` as it has 2 only parents l0 and l1 and its id is the empty string "".
 
-##### DAG Construction (See section 4, Lemma 3)
+### DAG(n) Construction (See section 4, Lemma 3 in the POET paper)
 
 The following is a possible algorithm that satisfies these requirements. However, any implementation that satisfies them (with equivalent or better computational complexity) is also acceptable.
 
@@ -85,14 +85,10 @@ Recursive computation of the labels of DAG(n):
 - When a label value is computed by the algorithm, store it in persistent storage
 - Note that this works because only l0 is needed for computing labels in the tree rooted in l1. All of the additional edges to nodes in the tree rooted at l1 start at l0.
 
-
 ### Data Types
 
-#### Commitment X
-arbitrary length bytes. Verifier implementation should just use H(commitment) to create a commitment that is in range (0, 1)^w . So the actually commitment can be sha256(commitment) when w=256.
-
 #### Proof (See section 5.2)
-A proof needs includes the following data:
+A proof includes the following data:
 1. φ - the label of the root node.
 2. For each identifier i in a challenge (0 <= i < t), an ordered list of labels which includes:
    2.1 li - The label of the node i
@@ -107,17 +103,3 @@ The complete proof data can be encoded in a tuple where the first value is φ an
 Note that we don't need to include identifier_t in the proof as the identifiers needs to be computed by the verifier.
 
 Also note that the proof should omit from the siblings list labels that were already included previously once in the proof. The verifier should create a dictionary of label values keyed by their node id, populate it from the siblings list it receives, and use it to get label values omitted from siblings lists - as the verifier knows the ids of all siblings on the path to the root from a given node.
-
-### About NIPs
-
-a NIP is a proof created by computing openH for the challenge γ := (Hx(φ,1),...Hx(φ,t)). e.g. without receiving γ from the verifier. Verifier asks for the NIP and verifies it like any other openH using verifyH. Note that the prover generates a NIP using only Hx(), t (shared security param) and φ (generated by PoSW(n)). To verify a NIP, a verifier generates the same challenge γ and verifies the proof using this challenge.
-
-Hx(φ,i) output is `w bits` but each challenge identifier should be `n bits` long. To create an identifier from Hx(φ,i) we take `the leftmost t bits` - starting from the most significant bit. So, for example, for n == 3 and for Hx(φ,1) = 010011001101..., the identifier will be `010`.
-
-### GetProof(challenge: Challenge) notes
-The verifier only stores up to m layers of the DAG (from the root at height 0, up to height m) and the labels of the n leaves.
-Generating a proof involves computing the labels of the siblings on the path from a leaf to the DAG root where some of these siblings are in DAG layers with height > m. These labels are not stored by the prover and need to be computed when a proof is generated. The following algorithm describes how to compute these siblings:
-
-1. For each node_id included in the input challenge, compute the node id of the node n. The node on the path from node_id to the root at DAG level m
-
-2. Construct the DAG rooted at node n. When the label of a sibling on the path from node_id to the root is computed as part of the DAG construction, add it to the list of sibling labels on the path from node_id to the root
