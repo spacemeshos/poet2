@@ -18,8 +18,8 @@ This repository provides the specs for an MVP implementing the main single-threa
 The constants are fixed and shared between the Prover and the Verifier. Values shown here are just an example and may be set differently for different POET server instances.
 
 ## Parameters
-- `n:` An unsigned int time parameter.
-- `N:` Number of iterations. N := 2^(n+1) - 1 for some unsigned integer n > 0.
+- `n:` An unsigned int time parameter
+- `N:` Number of iterations. N := 2^(n+1) - 1 for some unsigned positive integer
 
 ### Protocol Participants
 The following entities execute POET2 by sending messages between them:
@@ -27,9 +27,9 @@ The following entities execute POET2 by sending messages between them:
 - Verifier: A client using the prover by providing the input statement x, and verifying the prover provided proofs
 
 ## Definitions
-- DAG(n): The core direct acyclic graph data structure used by the verifier. Referred to in the paper as CP(n). The depth of DAG(n) is n, and the total number of nodes in DAG(n) is N where N=2^(n+1). DAG(n) has 2^n leaves.
-- x: {0,1}^w = rnd_in\[0, 2^w - 1): verifier provided input statement (commitment)
-- Hx: (0, 1)^{<= w(n+1)} => (0, 1)^w . Hx is constructed in the following way: Hx(i) = H(x,i) where H() is sha256().
+- DAG(n): The core direct acyclic graph data structure used by the verifier. Referred to in the paper as CP(n). The depth of DAG(n) is n, and the total number of nodes in DAG(n) is N where N=2^(n+1). DAG(n) has 2^n leaves
+- x: Verifier provided input statement (commitment). A w-bits long binary string
+- Hx(): A hash function constructed in the following way: Hx(i) = H(x,i) where H() is sha256()
 
 ## MVP main use case
 The following steps describe basic incremental POET2 protocol execution between a prover and a verifier as defined in section 4 of the POET2 paper. The happy path for the use case is for the verifier to complete the protocol, e.g., not abort it in any step. The MVP should implement this use case.
