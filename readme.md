@@ -1,5 +1,11 @@
 # POET2 - Incremental proofs of elapsed time MVP
 
+## Introduction
+
+A proof of elapsed time (POET, for short) is a technology that allows one party, a _prover_, to assert to another independent party, a _verifier_, that a minimum amount of time has elapsed since the prover generated and sent a random commitment to the verifier. The technology is used in the [Spacemesh](https://spacemesh.io) blockchain protocol to avoid the issues associated with [costless simulation, weak subjectivity, and long-range attacks](https://blog.positive.com/rewriting-history-a-brief-introduction-to-long-range-attacks-54e473acdba9) that proof of stake and a more naive proof of space protocol are inherently subject to. See this [whiteboard series video with Tal Moran](https://youtu.be/liNmlxrwrvI) for an overview of the Spacemesh protocol and how POET fits in.
+
+This exercise is to write an MVP implementation of a POET server in Rust.
+
 ## Overview
 This repository provides the specs for an MVP implementing the main single-threaded construction defined in section 4 of this paper [Incremental proofs sequential work](https://eprint.iacr.org/2019/650). For brevity, we call this construction `POET2` and refer to this paper in this readme as `POET2 paper`. POET2 is based on the basic construction defined in the paper [simple proofs of sequential work](https://eprint.iacr.org/2018/183). We refer to it in this doc as the `POET PAPER`. Please skim both papers first to get familiar with the protocol. As a reference, please also see this [reference go implementation](https://github.com/spacemeshos/poet) of a non-incremental POET construction.
 
