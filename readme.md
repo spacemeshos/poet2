@@ -1,9 +1,7 @@
 # POET2 - Incremental proofs of elapsed time MVP
 
 ## Overview
-This repository provides the specs for an MVP implementing the main single-threaded construction defined in section 4 of this paper [Incremental proofs sequential work](https://eprint.iacr.org/2019/650]). For brevity, we call this construction `POET2` and refer to this paper in this readme as `POET2 paper`.
-POET2 is based on the basic construction defined in the paper [simple proofs of sequential work](https://eprint.iacr.org/2018/183). We refer to it in this doc as the `POET PAPER`.
-Please read both papers first to get familiar with the protocol. As a reference, please also see this [reference go implementation](https://github.com/spacemeshos/poet) of a non-incremental POET construction.
+This repository provides the specs for an MVP implementing the main single-threaded construction defined in section 4 of this paper [Incremental proofs sequential work](https://eprint.iacr.org/2019/650]). For brevity, we call this construction `POET2` and refer to this paper in this readme as `POET2 paper`. POET2 is based on the basic construction defined in the paper [simple proofs of sequential work](https://eprint.iacr.org/2018/183). We refer to it in this doc as the `POET PAPER`. Please read both papers first to get familiar with the protocol. As a reference, please also see this [reference go implementation](https://github.com/spacemeshos/poet) of a non-incremental POET construction.
 
 
 ## Constants
@@ -30,26 +28,32 @@ The following entities execute POET2 by sending messages between them:
 ## MVP main use case
 The following steps describe basic incremental POET2 protocol execution between a prover and a verifier as defined in section 4 of the POET2 paper. The happy path for the use case is for the verifier to complete the protocol. e.g. not abort it in any step. The MVP should implement this use case.
 
-Prover and verifiers agree on an initial constants w=256, t= 32, and H = sha256()
+Prover and verifiers agree on an initial constants w=256, t=16, and H=sha256().
+They also need to agree on the binary encoding of proofs data.
 
-1. Verifier generates a random commitment x (w bits long) and sends it to the prover
-2. Prover computes proof `p(x, n)` by executing `Prove(x, n)`
+1. Verifier generates a random commitment x (w-bits long) and sends it to the prover
+2. Prover computes a proof `p(x, n)` by executing `Prove(x, n)`
 3. Prover sends `p(x, n)` to the Verifier
-4. Prover increments the proof by executing `Inc(x, p, n, n')` where `n' = n + 1` to generate `p1(x, n')`
-5. Verifier verifies the `p(x, n)` by executing `Verify(x, n)` and aborts if verification fails
+4. Prover increments the proof by executing `Inc(x, p, n, n')` where `n' = n + 1` to compute and generate `p1(x, n')`
+5. Verifier verifies the `p(x, n)` by executing `Verify(x, p, n)` and aborts if verification fails
 6. Prover sends the proof `p1(x, n')` to the verifier
-7. Verifier verifies the proof p1 by executing `Verify(x, n')` and aborts the protocol if verification fails
+7. Verifier verifies the proof p1 by executing `Verify(x, p1, n')` and aborts the protocol if verification fails
 
-## MVP Submission Guidelines
+## MVP Requirements & Guidelines
 - Implement a prover and verifier where the prover implements Prove(x, n), Inc(x, p, n, n') and the verifier implements Verify(x, n).
 - Use the DAG construction and the schemes described in section 4 of the POET2 paper (Main Construction)
 - Implement a simple API between the prover and verifier to execute the main uses case between them
 - Write a test of the main use case running with n = 24 and n' = 25 and verify that your test passes
+- Prover time complexity should be upper bound by O(N) sequential calls to H
+- Clearly document all of your implementation modules, types, traits, functions and methods
+- Use Cargo for modules management and the latest stable release of Rust 
 
 ## Implementation Tips for Bonus Points
 - Optimize proof size by only including a leaf value once in a proof
 - Don't use more than w(n+1) bits of memory in Prove(n)
-- Implement the most efficient verifier in terms of computation complexity. See section 4.3 of the POET2 paper
+- Verifier time complexity should be upper bound by O(log(t*n))
+- See section 4.3 of the POET2 paper for more details
+
 
 ### Theoretical background and context
 - [1] https://eprint.iacr.org/2019/650.pdf
@@ -66,7 +70,9 @@ Prover and verifiers agree on an initial constants w=256, t= 32, and H = sha256(
 
 ### Tips & Tricks
 
-#### DAG(n) Construction (See section 4, Lemma 3 in the POET paper)
+#### DAG(n) Construction
+
+The main construction of POET2 is using the term CP(n) to describe the DAG. This is basically the same DAG described in the POET paper in section 4, Lemma 3.
 
 The following is a possible algorithm that satisfies these requirements. However, any implementation that satisfies them (with equivalent or better computational complexity) is also acceptable.
 
