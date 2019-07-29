@@ -4,6 +4,7 @@
 This repository provides the specs for an MVP implementing the main single-threaded construction defined in section 4 of this paper [Incremental proofs sequential work](https://eprint.iacr.org/2019/650). For brevity, we call this construction `POET2` and refer to this paper in this readme as `POET2 paper`. POET2 is based on the basic construction defined in the paper [simple proofs of sequential work](https://eprint.iacr.org/2018/183). We refer to it in this doc as the `POET PAPER`. Please skim both papers first to get familiar with the protocol. As a reference, please also see this [reference go implementation](https://github.com/spacemeshos/poet) of a non-incremental POET construction.
 
 ## Constants
+
 - `w:uint`: A statistical security parameter. Shared between prover and verifiers. For the MVP we set it to 256. Note that this is denoted as λ in the POET2 paper.
 - `H`: A cryptographic hash function. For the MVP we set it to sha256.
 - `t:uint` a statistical security param which is a power of 2. For the MVP we set to 32.
