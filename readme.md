@@ -6,8 +6,8 @@ This repository provides the specs for an MVP implementing the main single-threa
 
 ## Constants
 - w:uint. A statistical security parameter. Shared between prover and verifiers. For the MVP we set it to 256. Note that this is denoted as λ in the POET2 paper
-- H: A cryptographic hash function. For the MVP we set it to sha256
-- t:uint a statistical security param which is a power of 2. For the MVP we set to 32.
+- H(): A cryptographic hash function with w-bits long output. For the MVP we set it to sha256()
+- t:uint a statistical security param which is a power of 2. For the MVP we set to 32
 
 The constants are fixed and shared between the Prover and the Verifier. Values shown here are just an example and may be set differently for different POET server instances.
 
@@ -22,8 +22,8 @@ The following entities execute POET2 by sending messages between them:
 
 ## Definitions
 - DAG(n): The core direct acyclic graph data structure used by the verifier. Referred in the paper as CP(n). The depth of DAG(n) is n, and the total number of nodes in Dag(n) is N where N=2^(n+1). Dag(n) has 2^n leaves
-- x:  verifier provided input statement (commitment). It is a binary w bits long binary string. e.g. `0001` for w = 4.
-- Hx: Hx is constructed in the following way: Hx(i) = H(x,i) where H() is sha256(). Hx outputs is w bits long.
+- x: Verifier provided input statement (commitment). It is a binary w bits long binary string. e.g. `0001` for w = 4.
+- Hx(): A hash function constructed in the following way: Hx(i) = H(x,i) where H() is sha256(). Hx() outputs is w bits long.
 
 ## MVP main use case
 The following steps describe basic incremental POET2 protocol execution between a prover and a verifier as defined in section 4 of the POET2 paper. The happy path for the use case is for the verifier to complete the protocol. e.g. not abort it in any step. The MVP should implement this use case.
