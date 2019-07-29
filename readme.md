@@ -22,8 +22,8 @@ The following entities execute POET2 by sending messages between them:
 
 ## Definitions
 - DAG(n): The core direct acyclic graph data structure used by the verifier. Referred in the paper as CP(n). The depth of DAG(n) is n, and the total number of nodes in Dag(n) is N where N=2^(n+1). Dag(n) has 2^n leaves
-- x: {0,1}^w = rnd_in[0, 2^w - 1) - verifier provided input statement (commitment)
-- Hx: (0, 1)^{<= w(n+1)} => (0, 1)^w . Hx is constructed in the following way: Hx(i) = H(x,i) where H() is sha256()
+- x:  verifier provided input statement (commitment). It is a binary w bits long binary string. e.g. `0001` for w = 4.
+- Hx: Hx is constructed in the following way: Hx(i) = H(x,i) where H() is sha256(). Hx outputs is w bits long.
 
 ## MVP main use case
 The following steps describe basic incremental POET2 protocol execution between a prover and a verifier as defined in section 4 of the POET2 paper. The happy path for the use case is for the verifier to complete the protocol. e.g. not abort it in any step. The MVP should implement this use case.
@@ -46,14 +46,13 @@ They also need to agree on the binary encoding of proofs data.
 - Write a test of the main use case running with n = 24 and n' = 25 and verify that your test passes
 - Prover time complexity should be upper bound by O(N) sequential calls to H
 - Clearly document all of your implementation modules, types, traits, functions and methods
-- Use Cargo for modules management and the latest stable release of Rust 
+- Use Cargo for modules management and the latest stable release of Rust
 
 ## Implementation Tips for Bonus Points
 - Optimize proof size by only including a leaf value once in a proof
 - Don't use more than w(n+1) bits of memory in Prove(n)
 - Verifier time complexity should be upper bound by O(log(t*n))
 - See section 4.3 of the POET2 paper for more details
-
 
 ### Theoretical background and context
 - [1] https://eprint.iacr.org/2019/650.pdf
