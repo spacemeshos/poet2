@@ -49,7 +49,7 @@ They also need to agree on the binary encoding of proofs data.
 - Implement a prover and verifier where the prover implements Prove(x, n), Inc(x, p, n, n') and the verifier implements Verify(x, n).
 - Use the DAG construction and the schemes described in section 4 of the POET2 paper (Main Construction)
 - Implement a simple API between the prover and verifier to execute the main uses case between them
-- Write a test of the main use case running with n = 24 and n' = 25 and verify that your test passes
+- Write a test of the main use case running with n = 27 and n' = 28 and verify that your test passes
 - Prover time complexity should be bounded by O(N) sequential calls to H
 - Clearly document all of your implementation modules, types, traits, functions and methods
 - Use Cargo for module management and the latest stable release of Rust
