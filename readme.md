@@ -37,7 +37,7 @@ The following steps describe basic incremental POET2 protocol execution between 
 Prover and verifiers agree on initial constants w=256, t=16, and H=sha256().
 They also need to agree on the binary encoding of proofs data.
 
-1. Verifier generates a random commitment x (w-bits long) and sends it to the prover
+1. Verifier generates a random challenge x (w-bits long) and sends it to the prover
 2. Prover computes a proof `p(x, n)` by executing `Prove(x, n)`
 3. Prover sends `p(x, n)` to the Verifier
 4. Prover increments the proof by executing `Inc(x, p, n, n')` where `n' = n + 1` to compute and generate `p1(x, n')`
@@ -71,23 +71,3 @@ They also need to agree on the binary encoding of proofs data.
 - [6] https://github.com/spacemeshos/poet
 - [7] https://github.com/avive/slow-time-functions
 
----
-
-### Tips & Tricks
-
-#### DAG(n) Construction
-
-The main construction of POET2 is using the term CP(n) to describe the DAG. This is basically the same DAG described in the POET paper in section 4, Lemma 3.
-
-The following is a possible algorithm that satisfies these requirements. However, any implementation that satisfies them (with equivalent or better computational complexity) is also acceptable.
-
-Recursive computation of the labels of DAG(n):
-
-1. Compute the labels of the left subtree (tree with root l0)
-2. Keep the label of l0 in memory and discard all other computed labels from memory
-3. Compute the labels of the right subtree (tree with root l1) - using l0
-4. Once l1 is computed, discard all other computed labels from memory and keep l1
-5. Compute the root label le = Hx("", l0, l1)
-
-- When a label value is computed by the algorithm, store it in persistent storage
-- Note that this works because only l0 is needed for computing labels in the tree rooted in l1. All of the additional edges to nodes in the tree rooted at l1 start at l0.
