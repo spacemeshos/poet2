@@ -61,14 +61,11 @@ They also need to agree on the binary encoding of proofs data.
 - Verifier time complexity should be bounded by O(log(t\*n))
 - See section 4.3 of the POET2 paper for more details
 
-### Theoretical background and context
+### Theoretical background, context and related work
 - [1] https://eprint.iacr.org/2019/650.pdf
 - [2] https://eprint.iacr.org/2011/553.pdf
 - [3] https://eprint.iacr.org/2018/183.pdf
 - [4] https://spacemesh.io/whitepaper1/
 - [5] https://pdfs.semanticscholar.org/b904/6d002da153a6fe9b06d469da4efffdfcb9c6.pdf
-
-### Related work
 - [6] https://github.com/spacemeshos/poet
-- [7] https://github.com/avive/slow-time-functions
 
