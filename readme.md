@@ -10,9 +10,9 @@ This task is to implement an MVP of an incremental POET protocol in Rust.
 This repository provides the specs for an MVP (Minimal Viable Product) implementing the main single-threaded construction defined in section 4 of this paper [Incremental proofs sequential work](https://eprint.iacr.org/2019/650). For brevity, we call this construction `POET2` and refer to this paper in this readme as `POET2 paper`. POET2 is based on the basic construction defined in the paper [simple proofs of sequential work](https://eprint.iacr.org/2018/183). We refer to it in this document as the `POET PAPER`. Please skim both papers first to get familiar with the protocol. As a reference, please also see this [reference go implementation](https://github.com/spacemeshos/poet) of a non-incremental POET construction.
 
 ## Constants
-- `w:uint`: A statistical security parameter. Shared between prover and verifiers. For the MVP we set it to 256. Note that this is denoted as λ in the POET2 paper.
+- `w`: Positive integer. A statistical security parameter. Shared between prover and verifiers. For the MVP we set it to 256. Note that this is denoted as λ in the POET2 paper.
 - `H`: A cryptographic hash function. For the MVP we set it to sha256.
-- `t:uint` a statistical security parameter which is a power of 2. For the MVP we set to 32.
+- `t`: A statistical security parameter equals to 2^x for some positive integer x. For the MVP we set to 32.
 
 The constants are fixed and shared between the Prover and the Verifier. Values shown here are just an example and may be set differently for different POET server instances.
 
@@ -52,12 +52,14 @@ They also need to agree on the binary encoding and decoding of the data exchange
 - Prover time complexity should be bounded by O(N) sequential calls to H()
 - Clearly document all of your implementation modules, types, traits, functions and methods
 - Use Cargo for module management and the latest stable release of Rust
-- Your solution should work on a standard x86-64 Linux system with 18GB of RAM. Our reference hardware for grading performance is an AWS m5a.xlarge instance running Amazon Linux, an AMD EPYC CPU at 2.3 GHZ base frequency (with boosting to up to 2.6 GHZ), 16 GB of RAM and a 2.5TB SSD system volume.
+- Your solution should work on a standard x86-64 Linux system with 18GB of RAM.
+
+Our reference hardware for grading performance is an AWS m5a.xlarge instance running Amazon Linux, an AMD EPYC CPU at 2.3 GHZ base frequency (with boosting to up to 2.6 GHZ), 16 GB of RAM and a 2.5TB SSD system volume.
 
 ## Implementation Tips for Bonus Points
 - Optimize proof size by only including a leaf value once in a proof
 - Don't use more than w(n+1) bits of memory in Prove(n)
-- Verifier time complexity should be bounded by O(log(t\*n))
+- Verifier time complexity should be bounded by O(log(t*n))
 - See section 4.3 of the POET2 paper for more details
 
 ### Theoretical background, context and related work
