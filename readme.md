@@ -53,7 +53,7 @@ They also need to agree on the binary encoding of proofs data.
 - Prover time complexity should be bounded by O(N) sequential calls to H
 - Clearly document all of your implementation modules, types, traits, functions and methods
 - Use Cargo for module management and the latest stable release of Rust
-- Your solution should work on a standard x86-64 Linux system with 18GB of RAM. Our reference hardware for grading performance is an AWS m5a.xlarge instance type running Amazon Linux, an AMD EPYC CPU at 2.3 GHZ base frequency (with boosting to up to 2.6 GHZ) and 16 GB of RAM
+- Your solution should work on a standard x86-64 Linux system with 18GB of RAM. Our reference hardware for grading performance is an AWS m5a.xlarge instance type running Amazon Linux, an AMD EPYC CPU at 2.3 GHZ base frequency (with boosting to up to 2.6 GHZ), 16 GB of RAM, 2.5TB SSD system volume.
 
 ## Implementation Tips for Bonus Points
 - Optimize proof size by only including a leaf value once in a proof
