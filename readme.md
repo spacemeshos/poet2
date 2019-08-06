@@ -10,25 +10,25 @@ This task is to implement an MVP of an incremental POET protocol in Rust.
 This repository provides the specs for an MVP (Minimal Viable Product) implementing the main single-threaded construction defined in section 4 of this paper [Incremental proofs sequential work](https://eprint.iacr.org/2019/650). For brevity, we call this construction `POET2` and refer to this paper in this readme as `POET2 paper`. POET2 is based on the basic construction defined in the paper [simple proofs of sequential work](https://eprint.iacr.org/2018/183). We refer to it in this document as the `POET PAPER`. Please skim both papers first to get familiar with the protocol. As a reference, please also see this [reference go implementation](https://github.com/spacemeshos/poet) of a non-incremental POET construction.
 
 ## Constants
-- `w`: Positive integer. A statistical security parameter. Shared between prover and verifiers. For the MVP we set it to 256. Note that this is denoted as λ in the POET2 paper
-- `H`: A cryptographic hash function. For the MVP we set it to sha256
-- `t`: A statistical security parameter equals to 2^x for some positive integer x. For the MVP we set to 32
+- `w`: Positive integer. A statistical security parameter. Shared between prover and verifiers. For the MVP we set it to 256. Note that this is denoted as λ in the POET2 paper.
+- `H`: A cryptographic hash function. For the MVP we set it to sha256.
+- `t`: a statistical security parameter equals to ^2 for some positive integer x. For the MVP we set to 32.
 
 The constants are fixed and shared between the Prover and the Verifier. Values shown here are just an example and may be set differently for different POET server instances.
 
 ## Parameters
 - `n`: An unsigned positive integer time parameter
-- `N`: Number of iterations. N equals to 2^(n+1) - 1 for some unsigned positive integer n
+- `N`: Number of iterations. N := 2^(n+1) - 1 for some unsigned positive integer n
 
 ### Protocol Participants
 The following entities execute POET2 by sending messages between them:
-- `Prover`: The service providing incremental proofs for verifiers
-- `Verifier`: A client using the prover by providing the input statement x, and verifying the prover provided proofs
+- Prover: The service providing incremental proofs for verifiers
+- Verifier: A client using the prover by providing the input statement x, and verifying the prover provided proofs
 
 ## Definitions
-- `DAG(n)`: The core direct acyclic graph data structure used by the verifier. Referred to in the POET2 paper as CP(n). The depth of DAG(n) is n, and the total number of nodes in DAG(n) is N where N=2^(n+1). DAG(n) has 2^n leaves
-- `x`: Verifier provided input statement (challenge). A w-bits long binary string
-- `Hx()`: A hash function constructed in the following way: Hx(i) = H(x,i) where H() is sha256() and x is a challenge
+- DAG(n): The core direct acyclic graph data structure used by the verifier. Referred to in the POET2 paper as CP(n). The depth of DAG(n) is n, and the total number of nodes in DAG(n) is N where N=2^(n+1). DAG(n) has 2^n leaves
+- x: Verifier provided input statement (challenge). A w-bits long binary string
+- Hx(): A hash function constructed in the following way: Hx(i) = H(x,i) where H() is sha256() and x is a challenge
 
 ## MVP main use case
 The following steps describe a basic incremental POET2 protocol execution between a prover and a verifier as defined in section 4 of the POET2 paper. The happy-path for the use case is for the verifier to complete the protocol, e.g., not abort it in any step. The MVP should correctly implement this use case.
