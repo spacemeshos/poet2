@@ -10,15 +10,15 @@ This task is to implement an MVP of an incremental POET protocol in Rust.
 This repository provides the specs for an MVP (Minimal Viable Product) implementing the main single-threaded construction defined in section 4 of this paper [Incremental proofs sequential work](https://eprint.iacr.org/2019/650). For brevity, we call this construction `POET2` and refer to this paper in this readme as `POET2 paper`. POET2 is based on the basic construction defined in the paper [simple proofs of sequential work](https://eprint.iacr.org/2018/183). We refer to it in this document as the `POET PAPER`. Please skim both papers first to get familiar with the protocol. As a reference, please also see this [reference go implementation](https://github.com/spacemeshos/poet) of a non-incremental POET construction.
 
 ## Constants
-- `w`: Positive integer. A statistical security parameter. Shared between prover and verifiers. For the MVP we set it to 256. Note that this is denoted as λ in the POET2 paper.
-- `H`: A cryptographic hash function. For the MVP we set it to sha256.
-- `t`: A statistical security parameter equals to 2^x for some positive integer x. For the MVP we set to 32.
+- `w`: Positive integer. A statistical security parameter. Shared between prover and verifiers. For the MVP we set it to 256. Note that this is denoted as λ in the POET2 paper
+- `H`: A cryptographic hash function. For the MVP we set it to sha256
+- `t`: A statistical security parameter equals to 2^x for some positive integer x. For the MVP we set to 32
 
 The constants are fixed and shared between the Prover and the Verifier. Values shown here are just an example and may be set differently for different POET server instances.
 
 ## Parameters
-- `n:` An unsigned positive integer time parameter
-- `N:` Number of iterations. N := 2^(n+1) - 1 for some unsigned positive integer n
+- `n`: An unsigned positive integer time parameter
+- `N`: Number of iterations. N equals to 2^(n+1) - 1 for some unsigned positive integer n
 
 ### Protocol Participants
 The following entities execute POET2 by sending messages between them:
