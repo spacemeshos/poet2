@@ -33,10 +33,10 @@ The following entities execute POET2 by sending messages between them:
 ## MVP main use case
 The following steps describe a basic incremental POET2 protocol execution between a prover and a verifier as defined in section 4 of the POET2 paper. The happy-path for the use case is for the verifier to complete the protocol, e.g., not abort it in any step. The MVP should correctly implement this use case.
 
-Prover and verifiers agree on initial constants w=256, t=32, and H=sha256().
+The prover and the verifier agree on initial constants w=256, t=32, and H=sha256().
 They also need to agree on the binary encoding and decoding of the data exchanged between them.
 
-1. Verifier generates a random challenge x (w-bits long) and sends it to the prover
+1. Verifier generates a random challenge x (w-bits long) and sends it together with n to the prover
 2. Prover computes a proof `p(x, n)` by executing `Prove(x, n)`
 3. Prover sends `p(x, n)` to the Verifier
 4. Prover increments the proof by executing `Inc(x, p, n, n')` where `n' = n + 1` to compute and generate `p1(x, n')`
@@ -45,14 +45,14 @@ They also need to agree on the binary encoding and decoding of the data exchange
 7. Verifier verifies the proof p1 by executing `Verify(x, p1, n')` and aborts the protocol if verification fails
 
 ## MVP Requirements & Guidelines
-- Implement a prover and verifier where the prover implements Prove(x, n), Inc(x, p, n, n') and the verifier implements Verify(x, n).
+- Implement a Prover and a Verifier where the Prover implements Prove(x, n), Inc(x, p, n, n') and the Verifier implements Verify(x, n).
 - Use the DAG construction and the schemes described in section 4 of the POET2 paper (Main Construction)
-- Implement a simple API between the prover and verifier to execute the main uses case between them
-- Write a test of the main use case running with n = 33 and n' = 34 and verify that your test passes
-- Prover time complexity should be bounded by O(N) sequential calls to H
+- Implement a simple API between the Prover and the Verifier to execute the main uses case between them
+- Write a test of the main use case running with n = 33 and n' = 34 and verify that your test pass
+- Prover time complexity should be bounded by O(N) sequential calls to H()
 - Clearly document all of your implementation modules, types, traits, functions and methods
 - Use Cargo for module management and the latest stable release of Rust
-- Your solution should work on a standard x86-64 Linux system with 18GB of RAM. Our reference hardware for grading performance is an AWS m5a.xlarge instance type running Amazon Linux, an AMD EPYC CPU at 2.3 GHZ base frequency (with boosting to up to 2.6 GHZ), 16 GB of RAM, 2.5TB SSD system volume.
+- Your solution should work on a standard x86-64 Linux system with 18GB of RAM. Our reference hardware for grading performance is an AWS m5a.xlarge instance running Amazon Linux, an AMD EPYC CPU at 2.3 GHZ base frequency (with boosting to up to 2.6 GHZ), 16 GB of RAM and a 2.5TB SSD system volume.
 
 ## Implementation Tips for Bonus Points
 - Optimize proof size by only including a leaf value once in a proof
