@@ -22,13 +22,13 @@ The constants are fixed and shared between the Prover and the Verifier. Values s
 
 ### Protocol Participants
 The following entities execute POET2 by sending messages between them:
-- Prover: The service providing incremental proofs for verifiers
-- Verifier: A client using the prover by providing the input statement x, and verifying the prover provided proofs
+- `Prover`: The service providing incremental proofs for verifiers
+- `Verifier`: A client using the prover by providing the input statement x, and verifying the prover provided proofs
 
 ## Definitions
-- DAG(n): The core direct acyclic graph data structure used by the verifier. Referred to in the POET2 paper as CP(n). The depth of DAG(n) is n, and the total number of nodes in DAG(n) is N where N=2^(n+1). DAG(n) has 2^n leaves
-- x: Verifier provided input statement (challenge). A w-bits long binary string
-- Hx(): A hash function constructed in the following way: Hx(i) = H(x,i) where H() is sha256() and x is a challenge
+- `DAG(n)`: The core direct acyclic graph data structure used by the verifier. Referred to in the POET2 paper as CP(n). The depth of DAG(n) is n, and the total number of nodes in DAG(n) is N where N=2^(n+1). DAG(n) has 2^n leaves
+- `x`: Verifier provided input statement (challenge). A w-bits long binary string
+- `Hx()`: A hash function constructed in the following way: Hx(i) = H(x,i) where H() is sha256() and x is a challenge
 
 ## MVP main use case
 The following steps describe a basic incremental POET2 protocol execution between a prover and a verifier as defined in section 4 of the POET2 paper. The happy-path for the use case is for the verifier to complete the protocol, e.g., not abort it in any step. The MVP should correctly implement this use case.
