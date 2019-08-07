@@ -10,8 +10,8 @@ This task is to implement an MVP of an incremental POET protocol in Rust.
 This repository provides the specs for an MVP (Minimal Viable Product) implementing the main single-threaded construction defined in section 4 of this paper [Incremental proofs sequential work](https://eprint.iacr.org/2019/650). For brevity, we call this construction `POET2` and refer to this paper in this readme as `POET2 paper`. POET2 is based on the basic construction defined in the paper [simple proofs of sequential work](https://eprint.iacr.org/2018/183). We refer to it in this document as the `POET PAPER`. Please skim both papers first to get familiar with the protocol. As a reference, please also see this [reference go implementation](https://github.com/spacemeshos/poet) of a non-incremental POET construction.
 
 ## Constants
-- `w`: Positive integer. A statistical security parameter. Shared between prover and verifiers. For the MVP we set it to 256. Note that this is denoted as λ in the POET2 paper.
-- `H`: A cryptographic hash function. For the MVP we set it to sha256.
+- `w`: Positive integer. A statistical security parameter. Shared between prover and verifiers. For the MVP we set it to 160. Note that this is denoted as λ in the POET2 paper.
+- `H`: A cryptographic hash function. For the MVP we set it to blake2b with 160 bits output.
 - `t`: a statistical security parameter equals to ^2 for some positive integer x. For the MVP we set to 32.
 
 The constants are fixed and shared between the Prover and the Verifier. Values shown here are just an example and may be set differently for different POET server instances.
@@ -28,12 +28,12 @@ The following entities execute POET2 by sending messages between them:
 ## Definitions
 - DAG(n): The core direct acyclic graph data structure used by the verifier. Referred to in the POET2 paper as CP(n). The depth of DAG(n) is n, and the total number of nodes in DAG(n) is N where N=2^(n+1). DAG(n) has 2^n leaves
 - x: Verifier provided input statement (challenge). A w-bits long binary string
-- Hx(): A hash function constructed in the following way: Hx(i) = H(x,i) where H() is sha256() and x is a challenge
+- Hx(): A hash function constructed in the following way: Hx(i) = H(x,i) where H() is blake2b-160() for internal nodes and x is a challenge. For leaf nodes, Hx(i) should be 200 sequential iterations of blake2b-160(x,i) where i is the input for the first iteration, and the resulting hash from a previous iteration is the i input for the current iteration.
 
 ## MVP main use case
 The following steps describe a basic incremental POET2 protocol execution between a prover and a verifier as defined in section 4 of the POET2 paper. The happy-path for the use case is for the verifier to complete the protocol, e.g., not abort it in any step. The MVP should correctly implement this use case.
 
-The prover and the verifier agree on initial constants w=256, t=32, and H=sha256().
+The prover and the verifier agree on initial constants w=160, t=32, and H=blake2b-160().
 They also need to agree on the binary encoding and decoding of the data exchanged between them.
 
 1. Verifier generates a random challenge x (w-bits long) and sends it together with n to the prover
