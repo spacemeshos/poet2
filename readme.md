@@ -11,7 +11,7 @@ This repository provides the specs for an MVP (Minimal Viable Product) implement
 
 ## Constants
 - `w`: Positive integer. A statistical security parameter. Shared between prover and verifiers. For the MVP we set it to 160. Note that this is denoted as λ in the POET2 paper.
-- `H`: A cryptographic hash function. For the MVP we set it to blake2b with 160 bits output.
+- `H`: A cryptographic hash function. For the MVP we set it to [blake2b with 160 bits output](https://en.bitcoinwiki.org/wiki/Blake2b).
 - `t`: a statistical security parameter equals to ^2 for some positive integer x. For the MVP we set to 32.
 
 The constants are fixed and shared between the Prover and the Verifier. Values shown here are just an example and may be set differently for different POET server instances.
